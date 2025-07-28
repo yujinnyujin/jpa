@@ -15,16 +15,15 @@ public class JpaMain {
         tx.begin();
 
         try{
-//            Member findMember = em.find(Member.class, 1L);
-//            findMember.setName("HelloJPA");
 
-            //전체 회원 조회
-            List<Member> result = em.createQuery("select m from Member as m", Member.class).getResultList();
+            //영속
+//            Member member = em.find(Member.class, 150L);
+//            member.setName("ZZZZZ");
 
-            for (Member member : result) {
-                System.out.println("member.name = " + member.getName());
-            }
+            Member member = new Member(200L, "member200");
+            em.persist(member);
 
+            em.flush();
 
             tx.commit();
         } catch (Exception e) {
