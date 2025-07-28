@@ -2,41 +2,26 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
-
 @Entity
 public class Member {
 
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+    //아이덴티티 전략에서는 내가 이 아이디에 값을 넣으면 안 돼요
+    //그리고 db에 인서트를 해야 된단 말이에요
+    //그러면 db에서 null로 인서트 쿼리가 날라오면 그 때 db에서 값을 세팅을 해줍니다
+    //이게 문제인 이유는 아이디 값을 알 수 있는 시점이 언제냐면,
+    //db에 들어가봐야 id값을 알 수가 있어요
+    //예외적으로 em.persist 호출 시점에 바로 db에 insert query를 날려버립니다
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String username;
-    //객체는 username이라고 쓰고 싶은데
-    //db에는 name이라고 써야 돼요
-
-    private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    @Lob
-    private String description;
 
     public Member() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -44,48 +29,12 @@ public class Member {
         return username;
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public RoleType getRoleType() {
-        return roleType;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public String getDescription() {
-        return description;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
 
