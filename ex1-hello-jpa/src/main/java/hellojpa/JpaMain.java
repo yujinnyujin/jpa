@@ -15,12 +15,19 @@ public class JpaMain {
         tx.begin();
 
         try{
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
             Member member = new Member();
-            member.setId("ID_A");
-            member.setUsername("C");
-
+            member.setName("member1");
+            member.setTeam(team);
             em.persist(member);
+
+            Member findMember = em.find(Member.class, member.getId());
+
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
 
             tx.commit();
         } catch (Exception e) {
@@ -33,6 +40,3 @@ public class JpaMain {
     }
 }
 
-//EntityManagerFactory는 DB당 하나만 생성해서 애플리케이션 전체에서 공유
-//EntityManager는 쓰레드간에 절대 공유해선 안 됨
-//JPA의 모든 데이터 변경은 트랜잭션 안에서 실행해야 함
