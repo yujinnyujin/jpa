@@ -3,6 +3,8 @@ package jpabook.jpashop.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
@@ -12,8 +14,18 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long id;
 
-    @Column(name = "MEMBER_ID")
-    private Long memberId;
+//    @Column(name = "MEMBER_ID")
+//    private Long memberId;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+    //멤버 입장에서는 하나의 회원이 여러 개의 주문을 날리니까..
+    //주문의 입장에서는 나를 주문한 회원은 하나
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems = new ArrayList<>();
+
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
@@ -23,31 +35,36 @@ public class Order {
         return id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
+    public OrderStatus getStatus() {
+        return status;
+    }
+
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
     }
 }
